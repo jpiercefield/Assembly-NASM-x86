@@ -1,0 +1,714 @@
+
+<!-- saved from url=(0055)http://users.csc.tntech.edu/~mboshart/3410programs.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>CSC 3410 Programs</title>
+
+<link rel="stylesheet" href="./Program_Information_files/mystyle.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" topmargin="0" marginheight="0" class="mystyle" link="#333366" vlink="#FF9D3A" alink="#FF9D3A">
+<br>
+<p><a href="http://users.csc.tntech.edu/~mboshart/3410syllabus.html">Back</a><br>
+<a href="http://users.csc.tntech.edu/~mboshart/3410examples.html">Examples</a></p>
+
+<p>
+</p><h1><center>CSC 3410 Programming Assignments</center></h1>
+<p>
+
+</p><center>
+<a href="http://users.csc.tntech.edu/~mboshart/3410programs.html#prog1">Plane-Line Intersection</a> | <a href="http://users.csc.tntech.edu/~mboshart/3410programs.html#prog2">Vankin's Mile</a> 
+| <a href="http://users.csc.tntech.edu/~mboshart/3410programs.html#prog3">Newton's Interpolating Polynomials</a> | <a href="http://users.csc.tntech.edu/~mboshart/3410programs.html#prog4">Fallout 3 Computer Hacking</a>
+</center>
+
+<p>
+
+<b>General Policies</b>:<br>
+There is to be <b>no</b> sharing of <b>any</b> code.
+You can receive help on your programs if you request help 
+<b>two days</b> before the program is due (or earlier), <b>so don't procrastinate</b>.
+
+</p><p>
+
+</p><hr>
+
+<a name="prog1"></a>
+
+<p>Program #1 Plane-Line Intersection <b>12.5%</b><br>
+  Due: 09/26/2016<br>
+  Assignment: </p>
+
+<p>
+<b>Background</b>
+</p><p>
+
+In computer graphics, it is frequently necessary to compute the location where a line
+intersects a plane.  One important case is to determine which items are actually visible to the
+camera and need to be rendered, and which can be ignored.  This can greatly increase the speed of rendering
+the scene.  As many items are partly visible to the camera, the location where lines intersect the planes
+that define the visible region must be computed, rendering part of the line and ignoring part.
+
+</p><p>
+<b>Equation of a Plane</b>
+</p><p>
+
+The equation of a plane is:
+</p><p>
+<b>n.(P - P0) = 0</b>, where n is the <b>normal</b> to the plane, P0 is a point on the plane, P-P0 is <b>point-point subtraction</b>,
+and n.(P-P0) is the <b>dot product</b> between n and (P-P0).
+</p><p>
+
+Point-point subtraction is performed by subtracting each component of the second point from the corresponding
+component of the first point, creating a <b>vector</b> (a direction).
+
+</p><p>
+
+The normal to the plane (the direction that points away from the plane) can be computed with three points and the cross product:<br>
+n = (PB - PA) x (PC - PA) where PA, PB, and PC are three points on the plane, and point-point subtraction has been used.
+
+</p><p>
+
+The cross product is computed as:
+</p><p>
+
+a x b (a cross b) = <br>
+        a_y*b_z - a_z*b_y  (the first component of a x b)<br>
+	a_z*b_x - a_x*b_z  (the second component of a x b)<br>
+        a_x*b_y - a_y*b_x  (the third component of a x b)<br>
+
+</p><p>
+
+The dot product is computed as:
+
+</p><p>
+a.b (a dot b) = a_x*b_x + a_y*b_y + a_z*b_z<br>
+where a_x is the first component of a, etc.<br>
+note: the dot product is just a number, a <b>scalar</b>
+</p><p>
+
+</p><p>
+<b>Parametric Equation of a Line</b>
+</p><p>
+
+The <b>parametric</b> equation of a line is:
+</p><p>
+P(&#945;) = (1-&#945;)P1 + &#945;*P2, where P1 and P2 are points on the line, and &#945; is a scalar.<br>
+Note that when &#945; is 0, P(&#945;) = P1, and when &#945; is 1, P(&#945;) is P2.  The other
+points on the line are obtained by letting &#945; take on other values.
+
+</p><p>
+
+The dot product represents the cosine of the angle between the two vectors.  If that dot product must be 0, then the angle
+between the vectors must be 90 degrees.  Since n is the direction away from the plane, it already makes an angle of 90 degrees
+with the plane.  This means that the direction (P-P0) must have no component out of the plane.  As P0 is known to be a point
+on the plane, P must also be on the plane for the equation to hold.
+
+</p><p>
+
+To identify a point that is both on the line and on the plane, simply plug in the parametric equation of a line into
+the equation for the plane and solve for &#945;.
+
+</p><p>
+
+&#945; = n.(P0-P1)/n.(P2-P1), where P0 is the point on the plane, P1 and P2 are the points on the line
+
+</p><p>
+
+Finally, plug this &#945; into the parametric equation of the line and you have the point of intersection.
+
+</p><p>
+<b>Program Details</b>
+</p><p>
+
+Write a program to allow the user to input three points that define a plane, and two points that define a line.
+Use this data to compute the point of intersection between the plane and the line, as outlined above.
+You may assume that the line will generate exactly one intersection point with the plane.
+You may assume that all data can be stored in WORDs (although temporary computations
+can make use of the DWORD registers).  There is a division in the computation of &#945;.  In order
+to maintain accuracy, store the numerator and denominator for &#945; separately, performing the division at the very end
+when the two decimal places are also computed.
+
+</p><p>
+
+<b>I expect lots of macros</b>.  Use macros for input, output, and computations.
+
+</p><p>
+
+<b>Use the provided batch file (<a href="http://users.csc.tntech.edu/~mboshart/3410programs/program1/build.bat">build.bat</a>)
+to assemble and link your program</b>.
+
+</p><p>
+
+<b>Your program must work with an input file 
+(<a href="http://users.csc.tntech.edu/~mboshart/3410programs/program1/plane_line.txt">plane_line.txt</a>)</b> 
+and have output formatted as in the below figure:<br>
+
+</p><p>
+</p><center><img src="./Program_Information_files/program1.jpg"></center>
+<p>
+
+</p><p><b>Program Specification:</b>
+</p><p>
+</p><ul>
+   <li>Compiling, Linking, Running</li>
+   <li>Basic I/O (using io.h)</li>
+   <ul>
+      <li>Obtaining user input</li>
+      <li>Using an input file</li>
+      <li>Displaying computation results</li>
+   </ul>
+   <li>Data Types</li>
+   <ul>
+      <li>WORD</li>
+      <li>BYTE</li>
+   </ul>
+   <li>Basic Instructions and Computations</li>
+   <ul>
+      <li>Move</li>
+      <li>Add</li>
+      <li>Subtract</li>
+      <li>Multiply</li>
+   </ul>
+   <li><b>Write Numerous Macros</b></li>
+   <ul>
+      <li>Computation Macros</li>
+      <li>Display Macros</li>
+   </ul>
+</ul>
+<p>
+<b>Submission:</b>
+<br><!--Comment (using the guidelines in the textbook and in class) and--> Submit Electronically:
+</p><ul>
+   <li>plane_line.asm</li>
+</ul>
+
+<!--
+<p>
+<b>Background</b>
+<p>
+
+In computer graphics, it is convenient to render the scene with the camera at the
+origin and pointed in the <b>negative</b> z-direction.  However, we want to be able
+to position the camera anywhere and render the scene.  This means that we must
+transform from &quot;world&quot; coordinates to &quot;camera&quot; 
+(or &quot;eye&quot;) coordinates. To accomplish this, the user must provide 3
+pieces of information (read in from an input file, refer to the example figure):
+
+<p>
+
+<ul>
+   <li>the location (x,y,z) of the camera in &quot;world&quot; coordinates (<b>eye point, E</b>)</li>
+   <li>the location (x,y,z) that the camera is pointed at (<b>at point, A</b>)</li>
+   <li>the direction (x,y,z) that is &quot;up&quot; for the camera (<b>up vector, v_up</b>)</li>
+</ul>
+
+<p>
+
+After obtaining the three coordinates for one of the above items, repeat the input
+in the form of an ordered triplet (x, y, z).
+
+<p>
+
+Using these supplied values, it is possible to construct a coordinate system
+where the camera is pointed along one of the coordinate axes. Then we can 
+take all of our objects in world coordinates and transform them into camera coordinates.
+Instead of (x,y,z), the camera coordinates are usually labeled (u,v,n).
+
+<p>
+<b>Computing n</b>
+<p>
+
+The view normal (n) is easily obtained through point-point subtraction.  Simply
+subtract the at point from the eye point (E - A) coordinate by coordinate.
+This is the direction along which the camera is pointed.  Note that the camera
+is pointed in the <b>negative</b> n-direction.
+
+<p>
+<b>Computing v</b>
+<p>
+
+Obtaining v is more complex.  First, v must be in the same plane as n and the up vector.
+This means that it is a <b>linear combination</b> of n and v_up which we can write as:
+
+<p>
+v = &alpha;*n + &beta;*v_up
+<p>
+
+In addition, v must be orthogonal (at a right angle) to n (just as x, y, and
+z are all orthogonal to one another).  We can use the <b>dot product</b> to enforce this requirement.
+
+<p>
+a.b (a dot b) = a_x*b_x + a_y*b_y + a_z*b_z (an obvious candidate for a macro)<br>
+where a_x is the first component of a, etc.<br>
+note: the dot product is just a number, a <b>scalar</b>
+<p>
+
+If two vectors are orthogonal, then their dot product is 0.  Let's take the dot product
+of our formula for v with n:
+
+<p>
+0 = &alpha;*(n.n) + &beta;*(v_up.n), which means that (solving for &alpha; and substituting)<br>
+(n.n)v = -&beta;(v_up.n)n + &beta;(n.n)v_up
+<p>
+
+To find (n.n)v, you will need to perform <b>vector-scalar multiplication</b> and
+<b>vector_vector addition</b>.  First, you need to compute -&beta;(v_up.n), which is just a scalar.
+Then, multiply this scalar by <b>each component</b> of n to obtain each
+component of -&beta;(v_up.n)n.  Now, add the components of -&beta;(v_up.n)n
+and &beta;(n.n)v_up together, component-by-component, to obtain (n.n)v.
+
+<p>
+
+I have multiplied v through by n.n (again, just a number) so that I can avoid doing division.
+When doing any integer arithmetic, we want to do the division last so that the 
+rounding error involved in division does not
+accumulate with each subsequent arithmetic operation.
+This will not affect my answer as multiplying a vector by a scalar changes its length,
+but not its direction.
+In fact, since we are not concerned with the length of v, just its direction, we can
+set (n.n)/&beta; = 1.
+
+<p>
+v = -(v_up.n)n + (n.n)v_up
+<p>
+
+<p>
+<b>Computing u</b>
+<p> 
+
+The last vector in our new coordinate system is u.  It is obtained simply by noting
+that it must be orthogonal to both v and n.  We can use the <b>cross product</b>
+to obtain u.  The cross product of two vectors gives a third vector orthogonal to the
+first two.  Note that you will actually obtain (n.n)u, but again, this is okay.
+
+<p>
+a x b (a cross b) = <br>
+        a_y*b_z - a_z*b_y  (the first component of a x b)<br>
+	a_z*b_x - a_x*b_z  (the second component of a x b)<br>
+        a_x*b_y - a_y*b_x  (the third component of a x b)<br>
+<p>
+
+<p>
+<b>Normalization</b>
+<p>
+
+For the transformation to camera-coordinates to work correctly, the lengths of 
+each of our 3 vectors must be 1.  The dot product can be used to obtain the length of 
+a vector:
+
+<p>
+a_len = &radic;a.a
+<p>
+
+To <b>normalize</b> a vector, simply divide each component of the vector
+by the length of the vector.  Thus, the division is done as the very last arithmetic
+operation.  In fact (refer to the example figure), we can avoid division error
+by reporting our results as a rational number.  In this way, the only error
+present is the error associated with finding the square root (done using sqrt.h and
+sqrt.obj).
+
+<p>
+
+<b>Use the provided batch file (<a href = "3410programs/program1/build.bat">build.bat</a>)
+to assemble and link your program</b>.
+Put header files (io.h, debug.h, sqrt.h) in the Assembly directory.
+This will make it much easier for me to grade your programs.
+
+<p>
+
+<b>Your program must work with an input file 
+(<a href = "3410programs/program1/camera.txt">camera.txt</a>)</b> 
+and have output formatted as in the below figure:<br>
+
+<p>
+<center><img src="3410programs/program1/program1.jpg"></center>
+<p>
+
+<p><b>Program Specification:</b>
+<p>
+<ul>
+   <li>Compiling, Linking, Running</li>
+   <li>Basic I/O (using io.h)</li>
+   <ul>
+      <li>Obtaining user input</li>
+      <li>Using an input file</li>
+      <li>Displaying computation results</li>
+   </ul>
+   <li>Data Types</li>
+   <ul>
+      <li>WORD</li>
+      <li>BYTE</li>
+   </ul>
+   <li>Basic Instructions and Computations</li>
+   <ul>
+      <li>Move</li>
+      <li>Add</li>
+      <li>Subtract</li>
+      <li>Multiply</li>
+   </ul>
+   <li>Write Numerous Macros</li>
+   <ul>
+      <li>Computation Macros</li>
+      <li>Display Macros</li>
+   </ul>
+</ul>
+
+<b>Submission:</b>
+<br>Comment (using the guidelines in the textbook and in class) and Submit Electronically:
+<ul>
+   <li>camera.asm</li>
+</ul>
+
+<br>
+-->
+<hr>
+
+<a name="prog2"></a>
+
+<p>Program #2 Vankin's Mile <b>12.5%</b><br>
+  Due: 10/12/2016<br>
+  Assignment: </p>
+
+<p>
+
+<b>Vankin’s Mile</b> is a solitaire game played on an n x m grid. 
+The player starts by placing a token on any square of the grid. 
+Then on each turn, the player moves the token either one square to the right or one square down. 
+The game ends when player moves the token off the edge of the board. 
+Each square of the grid has a numerical value, which could be positive, negative, or zero. 
+The player starts with a score of zero; whenever the token lands on a square, the player adds its value to his/her score. 
+The object of the game is to score as many points as possible. 
+For example, given the grid below, the player can score 8+11+7-3+4 = 27 points by placing 
+the initial token on the 8 in the second row, and then moving down, down, right, down, down.
+
+</p><p>
+
+</p><pre>-1 7 -8 10 -5
+-4 -9 8 -6 0
+5 -2 11 -6 7
+-12 4 7 -3 -3
+7 1 -6 4 -9
+</pre>
+
+<p>
+
+Allow the Vankin's Mile grid to be specified in an input file.
+
+</p><p>
+
+</p><ul>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program2/vankins_in.txt">vankins_in.txt</a> //first two lines are the dimensions of the grid, rows first</li>
+</ul>
+
+<p>
+
+
+Allow the user to type <b>vankins &lt;vankins_in.txt</b> at the command prompt to execute your program.
+Display both the input grid and the fully computed output grid to the console.
+Have your output grid formatted as below.  Below your output grid, show the path that must be taken from (1,1) for the best
+possible score.
+
+</p><p>
+
+</p><pre>25 26 19 12 2
+18 18 27 1 7
+22 17 19 1 7
+0 12 8 1 -3
+8 1 -2 4 -9
+
+rrdddrdd
+</pre>
+
+<p><b>Program Specification:</b>
+
+</p><ul>
+
+   <li>Branching</li>
+   <ul>
+      <li>Unconditional</li>
+      <li>Conditional</li>
+   </ul>
+   <li>Looping</li>
+   <ul>
+      <li>While</li>
+   </ul>
+   <li>Write Several Macros</li>
+   <ul>
+      <li>local</li>
+      <li><b>getElement</b> matrix_addr, row, col, loc</li>
+      <li><b>setElement</b> matrix_addr, row, col, loc</li>
+   </ul>
+   <li>Arrays</li>
+   <ul>
+      <li>Obtaining the Memory Address</li>
+      <li>Looping Through an Array</li>
+   </ul>
+   <li>More Basic Instructions</li>
+
+</ul>
+
+<p>
+
+<b>Submission:</b>
+<br><!--Comment (using the guidelines in the textbook and in class) and--> Submit Electronically:
+</p><ul>
+   <li>vankins.asm</li>
+</ul>
+
+<hr>
+
+<a name="prog3"></a>
+
+<p>Program #3 Newton's Interpolating Polynomials <b>12.5%</b><br>
+  Due: 11/02/2016<br>
+  Assignment: </p>
+
+<p>
+<b>Background</b>
+</p><p>
+
+You are provided with a set of data points.  That is, for several values
+of an independent variable x, you have the corresponding measurement for a dependent variable, y = f(x).
+The true underlying functional relationship between x and y is not known, however.  Furthermore, you
+need to know the dependent variable y for other values of the independent variable x.  One way to estimate
+the dependent variable values is to use <b>Newton's interpolating polynomials</b>.  It is possible
+to fit the known data points to a polynomial and to use the polynomial to obtain the required dependent variable values.
+
+</p><p>
+
+Newton's interpolating polynomials take the following form:
+
+</p><p>
+
+f(x) = b<sub>0</sub> + b<sub>1</sub>*(x - x<sub>0</sub>) + b<sub>2</sub>*(x - x<sub>0</sub>)*(x - x<sub>1</sub>) + b<sub>3</sub>*(x - x<sub>0</sub>)*(x - x<sub>1</sub>)*(x - x<sub>2</sub>) + ... <br>
+where x<sub>0</sub>, x<sub>1</sub>, x<sub>2</sub> are independent variable values corresponding to known data points, <br>
+and b<sub>0</sub>, b<sub>1</sub>, b<sub>2</sub> are determined as follows: <br>
+given that f[x<sub>n</sub>...x<sub>m</sub>] = (f[x<sub>n</sub>...x<sub>m + 1</sub>] - f[x<sub>n - 1</sub>...x<sub>m</sub>])/(x<sub>n</sub> - x<sub>m</sub>) for (n &gt;= m)<br>
+and f[x<sub>n</sub>...x<sub>n</sub>] = f(x<sub>n</sub>) (the <b>base case</b>) <br>
+then b<sub>n</sub> = f[x<sub>n</sub>...x<sub>0</sub>] <br>
+
+</p><p>
+
+<b>The definition for the b's is recursive</b>!
+
+</p><p>
+
+After the b's have been computed, everything on the right hand side of the equation for f(x) (= y) is known.
+Remember that x is just the user specified independent variable value under investigation. 
+Simply plug in for x and perform the arithmetic to obtain the interpolated y.
+
+</p><p>
+
+Note that investigating known (data point) x-values should result in interpolated y-values that match the known data y-values.
+
+</p><p>
+<b>Sorted Points</b>
+</p><p>
+
+To ensure that the interpolated value for y is as accurate as possible, the known data points should be <b>sorted</b> based
+on the distance from the user specified x.  That is, x<sub>0</sub> should be the data point that is closest to
+the specified x, x<sub>1</sub> the next closest, etc.  
+This is done with a sort that subtracts the data point 
+x-value from the user specified x-value and takes absolute value (fabs).  
+The sort places the points in ascending order based on this computation.  
+<b>This sort procedure has been done for you</b>.
+
+</p><p>
+
+<b>Files for Sorting Points</b>
+</p><ul>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/sort_points.h">sort_points.h</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/interpolate_sort.obj">interpolate_sort.obj</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/float.h">float.h</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/compare_floats.obj">compare_floats.obj</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/compare_floats.h">compare_floats.h</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/ftoaproc.obj">ftoaproc.obj</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/atofproc.obj">atofproc.obj</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/build.txt">build.txt</a></li>
+</ul>
+
+<p>
+<b>Global Data</b>
+</p><p>
+
+Compute the bs as you need them in the interpolate procedure (don't store the bs).
+
+</p><p>
+<b>Polynomial Degree</b>
+</p><p>
+
+Using more of the known data points to estimate the desired value of the dependent variable increases the accuracy
+of the estimate by increasing the degree of the polynomial.  Generally, polynomials of degree 3 (cubics) or lower
+are sufficient for interpolation.  This means that not all of the known data points will be used.  In the case
+of linear interpolation, only x<sub>0</sub>, f(x<sub>0</sub>), x<sub>1</sub>, and f(x<sub>1</sub>) will be used.
+
+</p><p>
+<b>Program I/O</b>
+</p><p>
+
+First, ask the user for the independent variable x-value to be investigated and the degree of the
+interpolating polynomial.  These values should be the first two lines of the input file.
+Next, read the known data points (REAL4s) of the polynomial in from the text file, storing them in an array.
+The (x, y) pairs are listed together (on separate lines) in the text file.
+Store (x, y) pairs together in the array.  Sort the points before interpolating.
+The program outputs the interpolated y-value for the requested x-value.  
+
+</p><p>
+
+<b>Files</b>
+</p><ul>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program3/points.txt">points.txt</a></li>
+</ul>
+
+<p>
+</p><center><img src="./Program_Information_files/program3.jpg"></center>
+<p>
+  
+</p><p><b>Program Specification:</b>
+</p><p>
+
+</p><ul>
+   <li>Floating Point Instructions and Computations</li>
+   <ul>
+      <li>Floating Point Stack</li>
+      <li>Compute b's Recursively (a procedure)</li>
+      <li>Evaluate Polynomial (a procedure)</li>
+   </ul>
+   <li>Procedures</li>
+   <ul>
+      <li>Using Header Files</li>
+      <li>Using the Stack</li>
+      <li>Recursion</li>
+      <li>Passing Parameters by Value</li>
+      <li>Passing Parameters by Reference</li>
+      <li>Local Variables</li>
+      <li>Maintaining Scope</li>
+      <li>EQU</li>
+   </ul>
+   <li>Arrays</li>
+   <ul>
+      <li>Arrays as Parameters</li>
+   </ul>
+   <li>Conditionals</li>
+   <li>Loops</li>
+   <li>Linking Multiple Files</li>
+</ul>
+
+<p>
+
+<b>Submission:</b>
+<br><!--Comment (using the guidelines in the textbook and in class) and--> Submit Electronically:
+</p><ul>
+   <li>interpolate_driver.asm</li>
+   <li>interpolate.asm</li>
+   <li>compute_bs.asm</li>
+   <li>header files</li>
+   <li>all other supporting files</li>
+</ul>
+
+<hr>
+
+<a name="prog4"></a>
+
+<p>Program #4 Fallout 3 Computer Hacking <b>12.5%</b><br>
+  Due: 11/28/2016<br>
+  Assignment: </p>
+
+<p>
+
+In Fallout 3, sometimes it is necessary to hack computers.  
+When hacking is attempted (assuming your science skill
+is high enough), you are given a list of possible passwords.  
+Each time you try a password from the list, either it is the correct password and you are granted access to the computer,
+or you are told how many characters in the attempted word match characters in the actual password.  
+<b>The character and its position in the actual password must match</b>.  
+By a process of elimination, it is then possible to determine the actual password. 
+You have 4 tries to determine the correct password.
+
+</p><p>
+
+Read in a list of strings (possible passwords) from a text file.
+The passwords will all be of the same length. 
+The maximum number of passwords in the text file is 20 (MAX EQU 20).
+The length of each password is 11 (LEN EQU 13 for the password, a carriage return, and a line feed--
+LEN should be defined in your driver and passed to procedures that need it).
+<b>Use an EQU to define LEN so that I can test your program with a different string length for the passwords</b>.
+A password that starts with an "x" is interpreted as the sentinel value 
+indicating that the user is done entering potential passwords.
+
+</p><p>
+
+Next, the user will enter which word that they tried as the password (the inputted index is 1-based), 
+and the number of character matches reported by Fallout 3.
+These values can also be read in from a text file as in my example input file.
+The length of the integers will be the same as the length of the strings so use <b>regular input</b>
+to read them in rather than inputW or inputD.
+The updated list of possible passwords is displayed, and the user is then able
+to guess another password from this updated list.  
+If only one password remains (or zero if some kind of input error occurred), the program terminates.
+
+</p><p>
+
+<b>Files</b>
+</p><ul>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program4/strutils.h">strutils.h</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program4/strutils.obj">strutils.obj</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program4/fallout.txt">fallout.txt</a></li>
+   <li><a href="http://users.csc.tntech.edu/~mboshart/3410programs/program4/build.bat">build.bat</a></li>
+</ul>
+
+<p>
+</p><center><img src="./Program_Information_files/program4.jpg"></center>
+<p>
+
+</p><p>
+</p><p><b>Program Specification:</b>
+</p><p>
+
+</p><ul>
+   <li>Strings</li>
+   <ul>
+      <li>movsb</li>
+      <li>repeat</li>
+      <li>ESI</li>
+      <li>EDI</li>
+   </ul>
+   <li>Procedures</li>
+
+      <ul>
+      <li>Conditional Assembly</li>
+      <li>Number of character matches procedure</li>
+      <ul>
+         <li><b>Directly use cmpsb and repeat</b> in this procedure</li>
+         <li>Returns the number of character matches between two strings (pass two memory addresses)</li>
+      </ul>
+      <li>Swap procedure</li>
+      <ul>
+         <li><b>Directly use movsb and repeat or use the loop instruction with lodsb and stosb</b> in this procedure</li>
+         <li>When a string matches the number of characters, swap (don't overwrite) it with the smallest index string that doesn't match (pass two memory addresses to swap)</li>
+         <li><b>Use either al or the stack for temporary swap space (no .DATA in the procedure!)</b></li>
+      </ul>
+      <li>Additional Procedures (your driver should not be exceptionally long)
+      </li></ul>
+
+   <li>Loops</li>
+   <li>Conditionals</li>
+   <li>Arrays</li>
+   <ul>
+      <li>Finding an Arbitrary Index</li>
+   </ul>
+</ul>
+
+<p>
+<b>Submission:</b>
+<br><!--Comment (using the guidelines in the textbook and in class) and--> Submit Electronically:
+</p><ul>
+   <li>fallout_driver.asm</li>
+   <li>fallout_procs.asm</li>
+   <li>all supporting files</li>
+</ul>
+
+<br>
+<br>
+<br>
+
+ </body></html>
